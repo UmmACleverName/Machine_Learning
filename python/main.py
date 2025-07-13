@@ -33,7 +33,7 @@ plt.legend(["Training Set","Testing Set"])
 plt.show()
 
 #Train perceptron model
-perceptronModel = perceptron.Perceptron(0.01,epoch=10)
+perceptronModel = perceptron.Perceptron(0.01,epoch=15)
 perceptronModel.Train(trainX, trainY)
 #Predict 
 predictY = [perceptronModel.Predict(xi) for xi in testX ]
@@ -44,7 +44,7 @@ plt.plot(range(1,len(perceptronModel.error)+1), perceptronModel.error,marker='o'
 plt.show()
 
 #Train adaline model
-adalineModel = adaline.Adaline(0.0001,epoch=10)
+adalineModel = adaline.Adaline(0.0001,epoch=15)
 adalineModel.Train(trainX, trainY)
 predictY = [yi - adalineModel.Predict(xi)  for xi, yi in zip(testX,testY) ]
 print("Adaline Model: " , predictY)
@@ -52,12 +52,22 @@ print("Adaline Model: " , predictY)
 plt.plot(range(1,len(adalineModel.error)+1), adalineModel.error,marker='o')
 plt.show()
 
+#Train adaline model with normalizing the data.
+trainStdX      = np.copy(trainX)
+trainStdX[:,0] = (trainX[:,0] - trainX[:,0].mean()) / trainX[:,0].std()
+trainStdX[:,1] = (trainX[:,1] - trainX[:,1].mean()) / trainX[:,1].std()
 
+testStdX      = np.copy(testX)
+testStdX[:,0] = (testX[:,0] - testX[:,0].mean()) / testX[:,0].std()
+testStdX[:,1] = (testX[:,1] - testX[:,1].mean()) / testX[:,1].std()
 
+adalineModel = adaline.Adaline(0.01,epoch=15)
+adalineModel.Train(trainStdX, trainY)
+predictY = [yi - adalineModel.Predict(xi)  for xi, yi in zip(testStdX,testY) ]
+print("Adaline Model: " , predictY)
 
-
-
-
+plt.plot(range(1,len(adalineModel.error)+1), adalineModel.error,marker='o')
+plt.show()
 
 
 
