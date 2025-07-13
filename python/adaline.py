@@ -11,7 +11,6 @@ Improvement on the perceptron algorithm.
 """
 
 
-
 import numpy as np
 
 class Adaline(object):

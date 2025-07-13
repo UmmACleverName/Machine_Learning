@@ -61,12 +61,12 @@ testStdX      = np.copy(testX)
 testStdX[:,0] = (testX[:,0] - testX[:,0].mean()) / testX[:,0].std()
 testStdX[:,1] = (testX[:,1] - testX[:,1].mean()) / testX[:,1].std()
 
-adalineModel = adaline.Adaline(0.01,epoch=15)
-adalineModel.Train(trainStdX, trainY)
-predictY = [yi - adalineModel.Predict(xi)  for xi, yi in zip(testStdX,testY) ]
+adalineModelStd = adaline.Adaline(0.01,epoch=15)
+adalineModelStd.Train(trainStdX, trainY)
+predictY = [yi - adalineModelStd.Predict(xi)  for xi, yi in zip(testStdX,testY) ]
 print("Adaline Model: " , predictY)
 
-plt.plot(range(1,len(adalineModel.error)+1), adalineModel.error,marker='o')
+plt.plot(range(1,len(adalineModelStd.error)+1), adalineModelStd.error,marker='o')
 plt.show()
 
 
