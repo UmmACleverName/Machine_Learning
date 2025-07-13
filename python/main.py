@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import perceptron
+import adaline
 
 from sklearn.model_selection import train_test_split
 
@@ -22,7 +23,7 @@ plt.show()
 #Preprocessing step -- Spilt the data into training and test.
 trainX, testX, trainY, testY = train_test_split(X,y,
                                                 random_state=1,
-                                                test_size=0.3,
+                                                test_size=0.45,
                                                 shuffle=True)
 
 plt.scatter(trainX[:len(trainX),0],trainX[:len(trainX),1])
@@ -36,8 +37,19 @@ perceptronModel = perceptron.Perceptron(0.01,epoch=10)
 perceptronModel.Train(trainX, trainY)
 #Predict 
 predictY = [perceptronModel.Predict(xi) for xi in testX ]
+predictY = [yi - perceptronModel.Predict(xi)  for xi, yi in zip(testX,testY) ]
+print("Perceptron Model: " , predictY)
 
 plt.plot(range(1,len(perceptronModel.error)+1), perceptronModel.error,marker='o')
+plt.show()
+
+#Train adaline model
+adalineModel = adaline.Adaline(0.0001,epoch=10)
+adalineModel.Train(trainX, trainY)
+predictY = [yi - adalineModel.Predict(xi)  for xi, yi in zip(testX,testY) ]
+print("Adaline Model: " , predictY)
+
+plt.plot(range(1,len(adalineModel.error)+1), adalineModel.error,marker='o')
 plt.show()
 
 
