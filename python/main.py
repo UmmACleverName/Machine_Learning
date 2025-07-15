@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import perceptron
 import adaline
+import logistic_regression
 
 from sklearn.model_selection import train_test_split
 
@@ -23,7 +24,7 @@ plt.show()
 #Preprocessing step -- Spilt the data into training and test.
 trainX, testX, trainY, testY = train_test_split(X,y,
                                                 random_state=1,
-                                                test_size=0.45,
+                                                test_size=0.85,
                                                 shuffle=True)
 
 plt.scatter(trainX[:len(trainX),0],trainX[:len(trainX),1])
@@ -38,7 +39,7 @@ perceptronModel.Train(trainX, trainY)
 #Predict 
 predictY = [perceptronModel.Predict(xi) for xi in testX ]
 predictY = [yi - perceptronModel.Predict(xi)  for xi, yi in zip(testX,testY) ]
-print("Perceptron Model: " , predictY)
+print("Perceptron Model Prediction:\n: " , predictY)
 
 plt.plot(range(1,len(perceptronModel.error)+1), perceptronModel.error,marker='o')
 plt.show()
@@ -47,7 +48,7 @@ plt.show()
 adalineModel = adaline.Adaline(0.0001,epoch=15)
 adalineModel.Train(trainX, trainY)
 predictY = [yi - adalineModel.Predict(xi)  for xi, yi in zip(testX,testY) ]
-print("Adaline Model: " , predictY)
+print("Adaline Model Prediction:\n: " , predictY)
 
 plt.plot(range(1,len(adalineModel.error)+1), adalineModel.error,marker='o')
 plt.show()
@@ -64,10 +65,23 @@ testStdX[:,1] = (testX[:,1] - testX[:,1].mean()) / testX[:,1].std()
 adalineModelStd = adaline.Adaline(0.01,epoch=15)
 adalineModelStd.Train(trainStdX, trainY)
 predictY = [yi - adalineModelStd.Predict(xi)  for xi, yi in zip(testStdX,testY) ]
-print("Adaline Model: " , predictY)
+print("Adaline Model Std Prediction:\n: " , predictY)
 
 plt.plot(range(1,len(adalineModelStd.error)+1), adalineModelStd.error,marker='o')
 plt.show()
+
+#Train logistic regression
+LogisticModel = logistic_regression.LogisticRegression(0.01,epoch=15)
+trainY = np.where(trainY == -1, 0, 1)
+testY = np.where(testY == -1, 0, 1)
+LogisticModel.Train(trainX, trainY)
+print()
+predictY = [yi - LogisticModel.Predict(xi)  for xi, yi in zip(testX,testY) ]
+print("Logistic Model Prediction:\n" , predictY)
+
+#plt.plot(range(1,len(LogisticModel.error)+1), LogisticModel.error,marker='o')
+#plt.show()
+
 
 
 
